@@ -36,7 +36,9 @@ public class WarnController {
      * @return A response entity containing a {@link List} of {@link WarnVO}s representing all the Warns.
      */
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                 @RequestParam(required = false, defaultValue = "5") Integer pageSize,
+                                 @RequestParam(required = false, defaultValue = "5") String sort) {
         try {
             List<Warn> warns = warnService.getAll();
             List<WarnVO> warnVOS = warns.stream().map(ObjectConverter::toVO).collect(Collectors.toList());
