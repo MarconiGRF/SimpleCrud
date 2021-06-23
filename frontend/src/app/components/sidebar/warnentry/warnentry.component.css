@@ -1,0 +1,37 @@
+.warn-entry {
+  padding: .5em 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  cursor: pointer;
+}
+
+.viewed .main-info h3 {
+  color: dimgray;
+}
+
+.viewed .main-info p {
+  color: gray;
+}
+
+.viewed .published-at span {
+  color: gray;
+}
+
+.warn-entry .main-info h3 {
+  margin: 0;
+  font-family: Nunito, Serif;
+}
+
+.warn-entry .main-info p {
+  margin: 0;
+  font-family: Nunito, Serif;
+  font-style: italic;
+}
+
+.warn-entry .published-at span {
+  margin: 0;
+  font-family: Nunito, Serif;
+  font-style: italic;
+  font-size: 10px;
+}

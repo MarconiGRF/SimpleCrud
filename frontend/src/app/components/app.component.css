@@ -1,0 +1,49 @@
+html, body {
+  margin: 0 !important;
+  padding: 0;
+}
+
+.main-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  background: cornflowerblue;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  padding: 0 1em;
+  box-shadow: 0px 2px 5px rgb(0 0 0 / 50%);
+  z-index: 1;
+}
+.toolbar span {
+  color: floralwhite;
+  font-family: Nunito, serif;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.content {
+  height: calc(100vh - 5em);
+  padding: 1em;
+  display: flex;
+}
+
+.sub-content {
+  display: flex;
+  width: 100%;
+  box-shadow: 0px 0px 3px rgb(0 0 0 / 50%);
+  border-radius: .3em;
+}
+
+.sub-content app-sidebar {
+  width: 35%;
+  height: 100%;
+}
+
+.sub-content app-warnview {
+  width: 65%;
+  height: 100%;
+  background: orange;
+}

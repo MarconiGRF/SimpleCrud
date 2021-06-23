@@ -1,0 +1,16 @@
+<div class="sidebar">
+  <div *ngIf="isLoadingWarns">
+    <div class="loading">
+      <p>Loading...</p>
+    </div>
+  </div>
+  <div *ngIf="!isLoadingWarns">
+    <div>
+      <app-warnentry *ngFor="let warnMetadata of warns" [warnMetadata]="warnMetadata" (warnFocus)="updateWarnView($event)">
+      </app-warnentry>
+    </div>
+    <div class="add-button" *ngIf="!isAdding">
+      <h3>ADD +</h3>
+    </div>
+  </div>
+</div>

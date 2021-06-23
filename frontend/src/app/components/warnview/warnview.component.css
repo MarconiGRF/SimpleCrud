@@ -1,0 +1,28 @@
+.warn-view {
+  padding: 1em;
+}
+
+.empty-message {
+  text-align: center;
+}
+
+.empty-message p {
+  font-style: italic;
+}
+
+.title {
+  line-break: anywhere;
+}
+
+.description {
+  line-break: anywhere;
+}
+
+.nunito {
+  font-family: Nunito;
+}
+
+.time-info {
+  font-size: 12px;
+  margin: 0;
+}

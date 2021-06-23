@@ -1,0 +1,22 @@
+<div class="warn-view">
+  <div *ngIf="currentWarn">
+    <div *ngIf="!isEditing">
+      <h1 class="title nunito">{{ currentWarn.title }}</h1>
+      <p class="description nunito">{{ currentWarn.description }}</p>
+      <div>
+        <div>
+          <span class="time-info nunito">{{ 'Published at ' + formatTime(currentWarn.publishedAt) }}</span>
+        </div>
+        <div>
+          <span class="time-info nunito">{{ 'Viewed ' + getViewed(currentWarn?.viewedAt) }}</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isEditing">
+      <input type="text" [(ngModel)]="currentWarn.title">
+    </div>
+  </div>
+  <div *ngIf="!currentWarn" class="empty-message">
+    <p>Create or select a warn from the list</p>
+  </div>
+</div>

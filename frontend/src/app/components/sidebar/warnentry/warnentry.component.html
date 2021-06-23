@@ -1,0 +1,8 @@
+<div class="warn-entry" [ngClass]="isViewed ? 'viewed' : ''" (click)="emitFocus()">
+  <div class="main-info">
+    <h3>{{ truncate(warnMetadata.title) }}</h3>
+  </div>
+  <div class="published-at">
+    <span>{{ formatTime(warnMetadata.publishedAt) }}</span>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<!-- Main View -->
+<div class="main-view">
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <span>Simple CRUD</span>
+  </div>
+
+  <!-- Warn View -->
+  <div class="content">
+    <div class="sub-content">
+      <app-sidebar [warns]="warns" [isLoadingWarns]="isLoadingWarns" (warnFocus)="changeFocus($event)"></app-sidebar>
+      <app-warnview [currentWarn]="visibleWarn"></app-warnview>
+    </div>
+  </div>
+</div>
