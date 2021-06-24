@@ -1,6 +1,7 @@
-<div class="warn-view">
-  <div *ngIf="currentWarn">
-    <div *ngIf="!isEditing">
+<div class="warn-view" *ngIf="currentWarn">
+  <!-- Non-editable Mode -->
+  <div class="warn-layout" *ngIf="!isEditing">
+    <div class="warn-info">
       <h1 class="title nunito">{{ currentWarn.title }}</h1>
       <p class="description nunito">{{ currentWarn.description }}</p>
       <div>
@@ -12,11 +13,36 @@
         </div>
       </div>
     </div>
-    <div *ngIf="isEditing">
-      <input type="text" [(ngModel)]="currentWarn.title">
+    <div class="warn-controls">
+      <div class="control-button delete" (click)="emitDelete()" >DELETE</div>
+      <div class="control-button edit" (click)="toggleEditMode()">EDIT</div>
     </div>
   </div>
-  <div *ngIf="!currentWarn" class="empty-message">
-    <p>Create or select a warn from the list</p>
+
+  <!-- Editable Mode -->
+  <div class="warn-layout" *ngIf="isEditing">
+    <div class="warn-info">
+      <div>
+        <input class="title-edit nunito" autofocus type="text" [(ngModel)]="currentWarn.title">
+      </div>
+      <div>
+        <input class="description-edit nunito" [(ngModel)]="currentWarn.description" />
+      </div>
+      <div>
+        <div>
+          <span class="time-info nunito">{{ 'Published at ' + formatTime(currentWarn.publishedAt) }}</span>
+        </div>
+        <div>
+          <span class="time-info nunito">{{ 'Viewed ' + getViewed(currentWarn?.viewedAt) }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="warn-controls">
+      <div class="control-button cancel" (click)="discardChanges()">DISCARD</div>
+      <div class="control-button save" (click)="updateWarn()">SAVE</div>
+    </div>
   </div>
+</div>
+<div *ngIf="!currentWarn" class="empty-message">
+  <p>Create or select a warn from the list</p>
 </div>

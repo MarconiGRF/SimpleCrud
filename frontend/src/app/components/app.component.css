@@ -45,5 +45,8 @@ html, body {
 .sub-content app-warnview {
   width: 65%;
   height: 100%;
-  background: orange;
+}
+
+.sidebar {
+  border-right: 1px solid rgb(0 0 0 / 20%);
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageParams } from "../models/pageParams";
 import { Warn } from "../models/warn";
 import { WarnsService } from "../services/warns.service";
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
     }
 
     this.isLoadingWarns = true
-    this.warnService.getWarns(this.pageParams).subscribe(
+    this.warnService.getPage(this.pageParams).subscribe(
       (warns) => {
         if (warns.length) {
           this.warns.push(...warns);
@@ -62,16 +62,36 @@ export class AppComponent implements OnInit {
       })
   }
 
+  loadWarnById(warnId: string): void {
+    this.warnService.getById(warnId).subscribe(
+      (warn) => {
+        const filteredWarnIndex = this.findWarnIndexById(warnId);
+        this.warns[filteredWarnIndex] = warn;
+        this.visibleWarn = this.warns[filteredWarnIndex];
+      }
+    )
+  }
+
   /**
    * Changes the focused Warn on the Warn Viewer to the one specified by the given {@param warnId}.
    * @param warnId - The Warn ID to filter the warn on the available list.
    */
   changeFocus(warnId: string): void {
-    const filteredWarnIndex = this.warns.findIndex(warn => warn.id === warnId)
+    const filteredWarnIndex = this.findWarnIndexById(warnId);
     if (filteredWarnIndex !== -1) {
       this.visibleWarn = this.warns[filteredWarnIndex]
       this.updateViewed(filteredWarnIndex)
     }
+  }
+
+  updatetWarn(warn: Warn): void {
+    this.warnService.update(warn).subscribe(
+      (result) => {
+        if (!result) {
+          this.loadWarnById(warn.id);
+        }
+      }
+    )
   }
 
   /**
@@ -92,4 +112,30 @@ export class AppComponent implements OnInit {
       }
     )
   }
+
+  /**
+   * Deletes a warn on the system by making a deleterequest to the service.
+   * @param warnId - The ID of the Warn to be deleted.
+   */
+  deleteWarn(warnId: string): void {
+    const filteredWarnIndex = this.findWarnIndexById(warnId);
+    if (filteredWarnIndex != -1) {
+      this.warnService.delete(this.warns[filteredWarnIndex].id).subscribe(
+        (result) => {
+          this.visibleWarn = undefined;
+          this.warns = this.warns.splice(filteredWarnIndex, 1);
+        }
+      )
+    }
+  }
+
+  /**
+   * Given a Warn ID finds its index in available array.
+   * @param warnId - The ID of the Warn to be found.
+   * @return - The Warn index, if not found will return -1.
+   */
+  private findWarnIndexById(warnId: string): number {
+    return this.warns.findIndex(warn => warn.id === warnId);
+  }
+
 }

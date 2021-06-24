@@ -9,10 +9,14 @@
   <div class="content">
     <div class="sub-content">
       <app-sidebar
+        class="sidebar"
         [warns]="warns" [isLoadingWarns]="isLoadingWarns" [hasNextPage]="hasNextPage"
         (warnFocus)="changeFocus($event)" (getWarnPage)="loadWarnPage()">
       </app-sidebar>
-      <app-warnview [currentWarn]="visibleWarn"></app-warnview>
+      <app-warnview
+        [currentWarn]="visibleWarn"
+        (deleteWarn)="deleteWarn($event)" (discardWarnChanges)="loadWarnById($event)" (updateWarnInfo)="updatetWarn($event)">
+      </app-warnview>
     </div>
   </div>
 </div>

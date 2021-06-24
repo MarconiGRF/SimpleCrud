@@ -3,23 +3,26 @@ import { Injectable } from '@angular/core';
 import { PageParams } from "../models/pageParams";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { catchError, map, retry } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 import {PageResponse} from "../models/pageResponse";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WarnsService {
+  warns: Warn[];
   baseURL = "http://localhost:8080/warns/";
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    this.warns = [];
+  }
 
   /**
    * Fetches the warns from the Backend using Http Client.
    * @param pageParams - The page params.
    * @return Warn[] - The array of warns available.
    */
-  getWarns(pageParams: PageParams): Observable<Warn[]> {
+  getPage(pageParams: PageParams): Observable<Warn[]> {
     const options = {
       params: this.buildGetParams(pageParams)
     };
@@ -29,6 +32,45 @@ export class WarnsService {
       }),
       catchError(() => {
         throw new Error("Error on fetching warns!");
+      })
+    );
+  }
+
+  getById(warnId: string): Observable<Warn> {
+    return this.httpClient.get<Warn>(this.baseURL + warnId).pipe(
+      map((response) => {
+        if (!!response) {
+          return  response;
+        } else {
+          throw new Error("Warn not found!");
+        }
+      })
+    )
+  }
+
+  /**
+   * Given a Warn ID makes an delete request to the Backend intended to delete a Warn.
+   * @param warnId
+   * @return boolean - True if operation was succeeded, false otherwise.
+   */
+  delete(warnId: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(this.baseURL + warnId).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError(() => {
+        throw new Error(`Error on deleting warn ${warnId}`);
+      })
+    );
+  }
+
+  update(warn: Warn): Observable<boolean> {
+    return this.httpClient.put<boolean>(this.baseURL, warn).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError(() => {
+        throw new Error("Error on updating warn.")
       })
     );
   }
@@ -61,4 +103,5 @@ export class WarnsService {
 
     return requestParams;
   }
+
 }
