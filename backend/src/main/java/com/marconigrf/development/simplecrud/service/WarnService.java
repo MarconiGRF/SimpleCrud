@@ -43,6 +43,24 @@ public class WarnService implements IWarnService {
     }
 
     /**
+     * Gets a Warn by its Id.
+     * @param warnId - The ID of the Warn to be searched.
+     * @return The Warn if found.
+     */
+    public Warn getById(UUID warnId) {
+        try {
+            Optional<Warn> warn = this.repository.findById(warnId);
+            if (warn.isPresent()) {
+                return warn.get();
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /**
      * Builds and returns a {@link Pageable} for the given parameters.
      * @param page - The page number.
      * @param pageSize - The page size.

@@ -3,6 +3,8 @@ package com.marconigrf.development.simplecrud.util;
 import com.marconigrf.development.simplecrud.entity.Warn;
 import com.marconigrf.development.simplecrud.vo.WarnVO;
 
+import java.util.Objects;
+
 /**
  * An utility class to convert objects between Entities and VOs.
  *
@@ -15,6 +17,9 @@ public class ObjectConverter {
      * @return A WanVO converted from the original object.
      */
     public static WarnVO toVO(Warn warn) {
+        if (Objects.isNull(warn)) {
+            return null;
+        }
         WarnVO warnVO = new WarnVO();
         warnVO.setId(warn.getId());
         warnVO.setTitle(warn.getTitle());

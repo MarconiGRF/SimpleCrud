@@ -49,6 +49,22 @@ public class WarnController {
     }
 
     /**
+     * Given a Warn ID returns it if exists..
+     * @param warnId The ID of the warning to be searched.
+     * @return The Warn if found.
+     */
+    @GetMapping("/{warnId}")
+    public ResponseEntity getById(@PathVariable UUID warnId) {
+        try {
+            Warn result = warnService.getById(warnId);
+            WarnVO resultVO = ObjectConverter.toVO(result);
+            return new ResponseEntity<>(resultVO, HttpStatus.OK);
+        } catch (ServiceException se) {
+            return exceptionHandler(se);
+        }
+    }
+
+    /**
      * Creates a new Warn based on the given {@link WarnVO}.
      * It is triggered on POST requests with a body that matches a {@link WarnVO}.
      *
