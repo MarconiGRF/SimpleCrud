@@ -84,7 +84,11 @@ export class AppComponent implements OnInit {
     }
   }
 
-  updatetWarn(warn: Warn): void {
+  /**
+   * Updates a Warn information.
+   * @param warn - The Warn update information.
+   */
+  updateWarn(warn: Warn): void {
     this.warnService.update(warn).subscribe(
       (result) => {
         if (!result) {
