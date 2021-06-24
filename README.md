@@ -27,5 +27,5 @@ Simple CRUD example using Java Spring Boot and Angular.
         1. `./gradlew bootRun`
 2. Then execute the frontend:
     1. Using a bash terminal, go to the `frontend/` folder of this project and execute:
-        1. `npm run serve`
-3. Finally, access the page navigating to `http://localhost:8000` on your web browser.
+        1. `ng serve`
+3. Finally, access the page navigating to `http://localhost:4200` on your web browser.
