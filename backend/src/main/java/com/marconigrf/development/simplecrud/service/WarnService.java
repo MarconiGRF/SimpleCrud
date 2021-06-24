@@ -4,6 +4,10 @@ import com.marconigrf.development.simplecrud.entity.Warn;
 import com.marconigrf.development.simplecrud.exception.ServiceException;
 import com.marconigrf.development.simplecrud.repository.WarnRepository;
 import com.marconigrf.development.simplecrud.util.ObjectValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,21 +29,28 @@ public class WarnService implements IWarnService {
     }
 
     /**
-     * Gets all the available Warns.
+     * Gets a page of the available Warns.
      *
-     * @return The list of all available warns.
+     * @return The page of available warns.
      */
-    public List<Warn> getAll() {
+    public Page<Warn> getAll(Integer page, Integer pageSize) {
         try {
-            Iterable<Warn> warns = this.repository.findAll();
-
-            List<Warn> warnList = new ArrayList<>();
-            warns.forEach(warnList::add);
-
-            return warnList;
+            Pageable pageable = this.buildPageable(page, pageSize);
+            return this.repository.findAll(pageable);
         } catch (Exception ex) {
             throw new ServiceException(ex);
         }
+    }
+
+    /**
+     * Builds and returns a {@link Pageable} for the given parameters.
+     * @param page - The page number.
+     * @param pageSize - The page size.
+     * @return A Pageable.
+     */
+    private Pageable buildPageable(Integer page, Integer pageSize) {
+        Sort pageSort = Sort.by(Sort.Direction.ASC, "publishedAt");
+        return PageRequest.of(page, pageSize, pageSort);
     }
 
     /**
@@ -92,19 +103,22 @@ public class WarnService implements IWarnService {
     /**
      * Updates an existing warn viewed property by its ID with the current moment.
      * @param warnId The information to update the entity with.
-     * @return True if the update operation was successful, false otherwise.
+     * @return The updated warn if operation was succeeded.
      */
-    public Boolean updateViewedAt(UUID warnId) {
+    public Warn updateViewedAt(UUID warnId) {
         try {
             Optional<Warn> entity = repository.findById(warnId);
             if (entity.isEmpty()) {
                 throw new ServiceException("Warn not found!");
             }
-            Warn actualWarn = entity.get();
-            actualWarn.setViewedAt(System.currentTimeMillis());
 
+            Warn actualWarn = entity.get();
+            if (Objects.isNull(actualWarn.getViewedAt())) {
+                actualWarn.setViewedAt(System.currentTimeMillis());
+            }
             repository.save(actualWarn);
-            return true;
+
+            return actualWarn;
         } catch (Exception ex) {
             throw new ServiceException(ex);
         }

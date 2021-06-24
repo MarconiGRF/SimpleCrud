@@ -6,6 +6,8 @@ import com.marconigrf.development.simplecrud.service.WarnService;
 import com.marconigrf.development.simplecrud.util.ObjectConverter;
 import com.marconigrf.development.simplecrud.vo.ErrorVO;
 import com.marconigrf.development.simplecrud.vo.WarnVO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,18 +33,16 @@ public class WarnController {
     }
 
     /**
-     * Gets all the available warns on system triggered by a GET Request.
+     * Gets all the available warns for a page on system triggered by a GET Request.
      *
-     * @return A response entity containing a {@link List} of {@link WarnVO}s representing all the Warns.
+     * @return A response entity containing a {@link Page} of {@link Warn}s.
      */
     @GetMapping
     public ResponseEntity getAll(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                 @RequestParam(required = false, defaultValue = "5") Integer pageSize,
-                                 @RequestParam(required = false, defaultValue = "5") String sort) {
+                                 @RequestParam(required = false, defaultValue = "5") Integer pageSize) {
         try {
-            List<Warn> warns = warnService.getAll();
-            List<WarnVO> warnVOS = warns.stream().map(ObjectConverter::toVO).collect(Collectors.toList());
-            return new ResponseEntity<>(warnVOS, HttpStatus.OK);
+            Page<Warn> warns = warnService.getAll(page, pageSize);
+            return new ResponseEntity<>(warns, HttpStatus.OK);
         } catch (ServiceException se) {
             return exceptionHandler(se);
         }
@@ -87,13 +87,14 @@ public class WarnController {
     /**
      * Updates an existing Warn viewedAt with the current moment.
      * @param warnId The ID of the warning to be updated.
-     * @return True if the operation was successful, false otherwise.
+     * @return The updated warn if operation was succeeded.
      */
     @PutMapping("/{warnId}")
     public ResponseEntity updateViewedAt(@PathVariable UUID warnId) {
         try {
-            Boolean result = warnService.updateViewedAt(warnId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            Warn result = warnService.updateViewedAt(warnId);
+            WarnVO resultVO = ObjectConverter.toVO(result);
+            return new ResponseEntity<>(resultVO, HttpStatus.OK);
         } catch (ServiceException se) {
             return exceptionHandler(se);
         }
