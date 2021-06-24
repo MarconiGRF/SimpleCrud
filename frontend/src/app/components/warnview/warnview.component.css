@@ -12,6 +12,7 @@
 
 .title {
   line-break: anywhere;
+  margin-top: 0;
 }
 
 .description {
@@ -24,5 +25,6 @@
 
 .time-info {
   font-size: 12px;
+  font-style: italic;
   margin: 0;
 }

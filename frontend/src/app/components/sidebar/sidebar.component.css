@@ -13,7 +13,7 @@
 
 .add-button {
   max-height: 3em;
-  background: crimson;
+  background: #58C494;
   text-align: center;
   padding: .5em 1em;
   cursor: pointer;
@@ -21,6 +21,21 @@
 
 .add-button h3 {
   font-family: Nunito, Serif;
+  margin: 0;
+  color: floralwhite;
+}
+
+.load-more-button {
+  max-height: 3em;
+  background: #6BB7FF;
+  text-align: center;
+  padding: .5em 1em;
+  cursor: pointer;
+}
+
+.load-more-button h3 {
+  font-family: Nunito, Serif;
+  font-weight: 400;
   margin: 0;
   color: floralwhite;
 }

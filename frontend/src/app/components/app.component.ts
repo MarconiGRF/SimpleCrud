@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { PageParams } from "../models/pageParams";
 import { Warn } from "../models/warn";
 import { WarnsService } from "../services/warns.service";
@@ -9,6 +9,7 @@ import { WarnsService } from "../services/warns.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  hasNextPage: boolean;
   isLoadingWarns: boolean;
   pageParams: PageParams;
   title: string;
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
   warns: Warn[];
 
   constructor(private warnService: WarnsService) {
+    this.hasNextPage = true;
     this.isLoadingWarns = false;
     this.pageParams = {
       page: 0,
@@ -30,13 +32,28 @@ export class AppComponent implements OnInit {
    * Upon initialization get the first Warn page available using the service.
    */
   ngOnInit(): void {
+    this.loadWarnPage();
+  }
+
+  /**
+   * Loads a Warn page based on the current page parameters.
+   */
+  loadWarnPage(): void {
+    if (!this.hasNextPage) {
+      return;
+    }
+
     this.isLoadingWarns = true
     this.warnService.getWarns(this.pageParams).subscribe(
       (warns) => {
         if (warns.length) {
-          this.warns = warns
-          this.pageParams.page++
+          this.warns.push(...warns);
+          this.pageParams.page++;
+          this.hasNextPage = true;
+        } else {
+          this.hasNextPage = false;
         }
+
         this.isLoadingWarns = false
       },
       (error) => {
@@ -53,6 +70,26 @@ export class AppComponent implements OnInit {
     const filteredWarnIndex = this.warns.findIndex(warn => warn.id === warnId)
     if (filteredWarnIndex !== -1) {
       this.visibleWarn = this.warns[filteredWarnIndex]
+      this.updateViewed(filteredWarnIndex)
     }
+  }
+
+  /**
+   * Update viewedAt attribute of warn if it doesn't already have one.
+   * @param warnIndex - The Warn index on the available warns.
+   */
+  updateViewed(warnIndex: number): void {
+    if (this.warns[warnIndex].viewedAt) {
+      return;
+    }
+
+    this.warnService.updateViewed(this.warns[warnIndex].id).subscribe(
+      (updatedWarn) => {
+        this.warns[warnIndex] = updatedWarn;
+      },
+      (error) => {
+        console.error(error);
+      }
+    )
   }
 }

@@ -8,7 +8,10 @@
   <!-- Warn View -->
   <div class="content">
     <div class="sub-content">
-      <app-sidebar [warns]="warns" [isLoadingWarns]="isLoadingWarns" (warnFocus)="changeFocus($event)"></app-sidebar>
+      <app-sidebar
+        [warns]="warns" [isLoadingWarns]="isLoadingWarns" [hasNextPage]="hasNextPage"
+        (warnFocus)="changeFocus($event)" (getWarnPage)="loadWarnPage()">
+      </app-sidebar>
       <app-warnview [currentWarn]="visibleWarn"></app-warnview>
     </div>
   </div>

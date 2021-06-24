@@ -4,12 +4,13 @@ import { PageParams } from "../models/pageParams";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { catchError, map, retry } from "rxjs/operators";
+import {PageResponse} from "../models/pageResponse";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WarnsService {
-  baseURL = "http://localhost:8080/warns";
+  baseURL = "http://localhost:8080/warns/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -22,12 +23,27 @@ export class WarnsService {
     const options = {
       params: this.buildGetParams(pageParams)
     };
-    return this.httpClient.get<Warn[]>(this.baseURL, options).pipe(
+    return this.httpClient.get<any>(this.baseURL, options).pipe(
+      map((response: PageResponse) => {
+        return response.content;
+      }),
+      catchError(() => {
+        throw new Error("Error on fetching warns!");
+      })
+    );
+  }
+
+  /**
+   * Makes an update to the updateView endpoint for the given warnId.
+   * @param warnId - The ID of the Warn to be updated.
+   */
+  updateViewed(warnId: string): Observable<Warn> {
+    return this.httpClient.put<Warn>(this.baseURL + warnId, null).pipe(
       map((response) => {
         return response;
       }),
       catchError(() => {
-        throw new Error('Error on fetching warns.');
+        throw new Error("Error on updating warn's viewed attribute!")
       })
     );
   }
@@ -38,10 +54,10 @@ export class WarnsService {
    * @return HttpParams - The http params.
    */
   buildGetParams(params: PageParams): HttpParams {
-    const requestParams = new HttpParams();
-    requestParams.append('page', params.page);
-    requestParams.append('pageSize', params.pageSize);
-    requestParams.append('sort', params.sort);
+    let requestParams = new HttpParams();
+    requestParams = requestParams.append('page', params.page);
+    requestParams = requestParams.append('pageSize', params.pageSize);
+    requestParams = requestParams.append('sort', params.sort);
 
     return requestParams;
   }
