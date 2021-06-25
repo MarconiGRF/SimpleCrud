@@ -74,9 +74,9 @@ public class WarnService implements IWarnService {
     /**
      * Creates a Warn entry on the system.
      * @param warn The object to be saved.
-     * @return True if the creation was a success, false otherwise.
+     * @return The Warn if operation is succeeded.
      */
-    public Boolean create(Warn warn) {
+    public Warn create(Warn warn) {
         try {
             if (ObjectValidator.isValid(warn)) {
                 warn.setPublishedAt(System.currentTimeMillis());
@@ -85,7 +85,7 @@ public class WarnService implements IWarnService {
                 throw new ServiceException("Object is not a valid Warn!");
             }
 
-            return true;
+            return warn;
         } catch (Exception ex) {
             throw new ServiceException(ex);
         }

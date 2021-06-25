@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface IWarnService {
     Page<Warn> getAll(Integer page, Integer pageSize);
 
-    Boolean create(Warn warn);
+    Warn create(Warn warn);
 
     Boolean update(Warn warn);
 

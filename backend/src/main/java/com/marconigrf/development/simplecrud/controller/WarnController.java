@@ -69,15 +69,16 @@ public class WarnController {
      * It is triggered on POST requests with a body that matches a {@link WarnVO}.
      *
      * @param warnVO The Warn VO containing the information of a warn.
-     * @return True if the operation was successful, False otherwise.
+     * @return The Warn VO if the operation was successful.
      */
     @PostMapping
     public ResponseEntity create(@RequestBody WarnVO warnVO) {
         try {
             Warn warn = ObjectConverter.toEntity(warnVO);
-            Boolean result = warnService.create(warn);
+            Warn result = warnService.create(warn);
 
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            WarnVO resultVO = ObjectConverter.toVO(result);
+            return new ResponseEntity<>(resultVO, HttpStatus.OK);
         } catch (ServiceException se) {
             return exceptionHandler(se);
         }
