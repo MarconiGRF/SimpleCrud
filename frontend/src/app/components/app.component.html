@@ -11,10 +11,10 @@
       <app-sidebar
         class="sidebar"
         [warns]="warns" [isLoadingWarns]="isLoadingWarns" [hasNextPage]="hasNextPage"
-        (warnFocus)="changeFocus($event)" (getWarnPage)="loadWarnPage()">
+        (warnFocus)="changeFocus($event)" (getWarnPage)="loadWarnPage()" (createWarn)="createWarn()">
       </app-sidebar>
       <app-warnview
-        [currentWarn]="visibleWarn"
+        [currentWarn]="visibleWarn" [isAddOperation]="isAddOperation"
         (deleteWarn)="deleteWarn($event)" (discardWarnChanges)="loadWarnById($event)" (updateWarnInfo)="updateWarn($event)">
       </app-warnview>
     </div>

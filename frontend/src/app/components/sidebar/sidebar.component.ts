@@ -13,8 +13,9 @@ export class SidebarComponent implements OnInit {
 
   @Output() warnFocus: EventEmitter<string>;
   @Output() getWarnPage: EventEmitter<void>;
+  @Output() createWarn: EventEmitter<void>;
 
-  isAdding: boolean;
+  @Input() isAdding: boolean;
 
   constructor() {
     this.isLoadingWarns = false;
@@ -22,6 +23,7 @@ export class SidebarComponent implements OnInit {
     this.hasNextPage = true;
     this.warnFocus = new EventEmitter<string>();
     this.getWarnPage = new EventEmitter<void>();
+    this.createWarn = new EventEmitter<void>();
   }
 
   ngOnInit(): void {

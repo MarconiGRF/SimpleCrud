@@ -11,6 +11,7 @@ import { WarnsService } from "../services/warns.service";
 export class AppComponent implements OnInit {
   hasNextPage: boolean;
   isLoadingWarns: boolean;
+  isAddOperation: boolean;
   pageParams: PageParams;
   title: string;
   visibleWarn?: Warn;
@@ -18,6 +19,7 @@ export class AppComponent implements OnInit {
 
   constructor(private warnService: WarnsService) {
     this.hasNextPage = true;
+    this.isAddOperation = false;
     this.isLoadingWarns = false;
     this.pageParams = {
       page: 0,
@@ -62,12 +64,32 @@ export class AppComponent implements OnInit {
       })
   }
 
+  /**
+   * Loads a Warn by its Id and replaces the current warn on the array with the received information.
+   * @param warnId - The ID of the Warn to be searched
+   */
   loadWarnById(warnId: string): void {
     this.warnService.getById(warnId).subscribe(
       (warn) => {
         const filteredWarnIndex = this.findWarnIndexById(warnId);
         this.warns[filteredWarnIndex] = warn;
         this.visibleWarn = this.warns[filteredWarnIndex];
+      }
+    )
+  }
+
+  createWarn(): void {
+    let newWarn: Warn = {
+      id: '',
+      title: 'Insert a title',
+      description: 'Insert a description',
+      publishedAt: new Date().getMilliseconds()
+    };
+    this.isAddOperation = true;
+    this.warnService.create(newWarn).subscribe(
+      (result) => {
+        this.warns.push(result);
+        this.changeFocus(result.id);
       }
     )
   }
@@ -80,7 +102,11 @@ export class AppComponent implements OnInit {
     const filteredWarnIndex = this.findWarnIndexById(warnId);
     if (filteredWarnIndex !== -1) {
       this.visibleWarn = this.warns[filteredWarnIndex]
-      this.updateViewed(filteredWarnIndex)
+      if (this.isAddOperation) {
+        this.isAddOperation = false;
+      } else {
+        this.updateViewed(filteredWarnIndex)
+      }
     }
   }
 
@@ -127,7 +153,7 @@ export class AppComponent implements OnInit {
       this.warnService.delete(this.warns[filteredWarnIndex].id).subscribe(
         (result) => {
           this.visibleWarn = undefined;
-          this.warns = this.warns.splice(filteredWarnIndex, 1);
+          this.warns.splice(filteredWarnIndex, 1);
         }
       )
     }

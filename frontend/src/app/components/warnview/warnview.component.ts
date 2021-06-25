@@ -10,6 +10,8 @@ import {WarnsService} from "../../services/warns.service";
 export class WarnviewComponent implements OnInit, OnChanges {
 
   @Input() currentWarn?: Warn;
+  @Input() isAddOperation: boolean;
+
   @Output() deleteWarn: EventEmitter<string>;
   @Output() discardWarnChanges: EventEmitter<string>;
   @Output() updateWarnInfo: EventEmitter<Warn>;
@@ -20,7 +22,8 @@ export class WarnviewComponent implements OnInit, OnChanges {
   ];
 
   constructor(private warnService: WarnsService) {
-    this.isEditing = false
+    this.isAddOperation = false;
+    this.isEditing = false;
     this.deleteWarn = new EventEmitter<string>();
     this.discardWarnChanges = new EventEmitter<string>();
     this.updateWarnInfo = new EventEmitter<Warn>();
@@ -89,7 +92,10 @@ export class WarnviewComponent implements OnInit, OnChanges {
    * Emits an event intended to discard the current changes and fetch the Warn again.
    */
   discardChanges(): void {
-    this.toggleEditMode();
+    if (this.isEditing) {
+      this.toggleEditMode();
+    }
+
     if (this.currentWarn) {
       this.discardWarnChanges.emit(this.currentWarn.id)
     }
@@ -101,6 +107,9 @@ export class WarnviewComponent implements OnInit, OnChanges {
   updateWarn(): void {
     this.toggleEditMode();
     if (this.currentWarn) {
+      if (this.isAddOperation) {
+        this.isAddOperation = false;
+      }
       this.updateWarnInfo.emit(this.currentWarn);
     }
   }

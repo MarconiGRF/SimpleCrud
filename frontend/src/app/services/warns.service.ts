@@ -36,6 +36,10 @@ export class WarnsService {
     );
   }
 
+  /**
+   * Fetches a Warm by its ID.
+   * @param warnId - The ID of the warn to be fetched.
+   */
   getById(warnId: string): Observable<Warn> {
     return this.httpClient.get<Warn>(this.baseURL + warnId).pipe(
       map((response) => {
@@ -46,6 +50,21 @@ export class WarnsService {
         }
       })
     )
+  }
+
+  /**
+   * Creates a Warn on the backend by making a POST request to it.
+   * @param warn - The info of the Warn to be created.
+   */
+  create(warn: Warn): Observable<Warn> {
+    return this.httpClient.post<Warn>(this.baseURL, warn).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError(() => {
+        throw new Error("Error on creating warn!");
+      })
+    );
   }
 
   /**
