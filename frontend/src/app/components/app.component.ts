@@ -78,6 +78,9 @@ export class AppComponent implements OnInit {
     )
   }
 
+  /**
+   * Creates a Warn with a template.
+   */
   createWarn(): void {
     let newWarn: Warn = {
       id: '',
